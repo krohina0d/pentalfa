@@ -1,6 +1,6 @@
-import { Box, Alert, Button, Paper, Typography, Divider } from '@mui/material';
+import { Box, Alert, Button, Paper, Typography, Divider, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import NlognLogo from './NlognLogo';
 
 const GameBoard = styled(Box)({
@@ -46,6 +46,24 @@ const Game = () => {
         isFirstPhase: true,
         selectedPointId: null
     });
+
+    const [showDialog, setShowDialog] = useState(false);
+
+    // Обновляем проверку завершения игры
+    useEffect(() => {
+        if (placedPieces.length === 9 && !showDialog) {
+            setShowDialog(true);
+        }
+    }, [placedPieces.length, showDialog]);
+
+    const handleDialogClose = () => {
+        setShowDialog(false);
+        handleReset();
+    };
+
+    const navigateToNlogn = () => {
+        window.open('https://nlogn.info', '_blank');
+    };
 
     // Вычисляем координаты вершин пятиконечной звезды
     const calculateStarPoints = (): Point[] => {
@@ -183,6 +201,7 @@ const Game = () => {
             isFirstPhase: true,
             selectedPointId: null
         });
+        setShowDialog(false);
     };
 
     const starLines = createStarLines();
@@ -302,6 +321,41 @@ const Game = () => {
                     <NlognLogo />
                 </RulesPanel>
             </GameContainer>
+
+            {/* Диалоговое окно после победы */}
+            <Dialog
+                open={showDialog}
+                onClose={handleDialogClose}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle>
+                    Поздравляем с победой!
+                </DialogTitle>
+                <DialogContent>
+                    <Typography variant="body1" paragraph>
+                        Понравилась эта игра? В школе NlogN мы регулярно решаем похожие интересные задачи!
+                    </Typography>
+                    <Box sx={{ textAlign: 'center', my: 2 }}>
+                        <NlognLogo />
+                    </Box>
+                    <Typography variant="body1">
+                        Присоединяйтесь к нам и развивайте свои навыки решения логических задач!
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDialogClose} color="primary">
+                        Закрыть
+                    </Button>
+                    <Button 
+                        onClick={navigateToNlogn} 
+                        variant="contained" 
+                        color="primary"
+                    >
+                        Перейти на сайт школы
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 };

@@ -1,15 +1,17 @@
 {
-  "name": "web-2024-template",
+  "name": "pentalfa",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "npm install && vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "npm run build && gh-pages -d dist"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
+  "homepage": "https://your-github-username.github.io/pentalfa/",
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
